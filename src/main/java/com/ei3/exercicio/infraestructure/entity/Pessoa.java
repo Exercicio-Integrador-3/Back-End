@@ -1,6 +1,8 @@
 package com.ei3.exercicio.infraestructure.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.Size;
 public class Pessoa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotBlank(message = "O nome não pode estar em branco")
@@ -30,4 +33,6 @@ public class Pessoa {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public Pessoa(){}
 }
