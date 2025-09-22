@@ -35,4 +35,9 @@ public class Pessoa {
     }
 
     public Pessoa(){}
+
+    public Pessoa(long id){
+        this.id = id;
+    }
+
 }

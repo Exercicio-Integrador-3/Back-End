@@ -19,6 +19,7 @@ public class Perfil {
     @Enumerated(EnumType.STRING)
     public TipoPerfil tipo;
 
+    
     public long getId() {
         return Id;
     }
@@ -36,4 +37,9 @@ public class Perfil {
     }
 
     public Perfil(){}
+
+    public Perfil(long id){
+        Id = id;
+    }
+
 }
