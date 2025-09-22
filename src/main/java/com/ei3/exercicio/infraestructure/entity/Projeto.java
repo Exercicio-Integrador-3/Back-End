@@ -24,7 +24,6 @@ public class Projeto {
     @NotNull
     private LocalDate dataInicio;
 
-    @NotNull
     private LocalDate dataFim;
 
     @NotBlank(message = "A descrição não pode estar em branco")
