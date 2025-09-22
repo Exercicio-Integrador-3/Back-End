@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -36,6 +35,17 @@ public class Contrato {
 
     @NotNull
     private double salarioHora;
+
+    public Contrato(long id, Pessoa pessoa, Perfil perfil, LocalDate dataInicio, LocalDate dataFim,
+            int horasSemanais, double salarioHora) {
+        Id = id;
+        this.pessoa = pessoa;
+        this.perfil = perfil;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.horasSemanais = horasSemanais;
+        this.salarioHora = salarioHora;
+    }
 
     public long getId() {
         return Id;
