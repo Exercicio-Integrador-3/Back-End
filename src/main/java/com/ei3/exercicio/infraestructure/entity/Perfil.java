@@ -1,6 +1,8 @@
 package com.ei3.exercicio.infraestructure.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +16,7 @@ public class Perfil {
     public long Id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     public TipoPerfil tipo;
 
     public long getId() {
