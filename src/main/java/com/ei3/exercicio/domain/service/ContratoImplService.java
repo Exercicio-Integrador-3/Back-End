@@ -34,7 +34,6 @@ public class ContratoImplService implements ContratoService{
             
         }
 
-        System.out.println("checando perfil:");
 
 
         Perfil perfil = perfilRepository.getById(contratoDto.perfilId()).orElse(null);
@@ -42,7 +41,6 @@ public class ContratoImplService implements ContratoService{
         if(perfil == null){
             return false;   
         }
-        System.out.println("checando pessoa:");
 
         Pessoa pessoa = pessoaRepository.getById(contratoDto.pessoaId()).orElse(null);
         // pessoa nao encontrada.
@@ -54,10 +52,8 @@ public class ContratoImplService implements ContratoService{
                      perfil, contratoDto.dataInicio(), contratoDto.dataFim(),
                      contratoDto.horasSemanais(), contratoDto.salarioHora());
         
-        System.out.println("Inserindo: " + c.toString());
         
         try{
-            System.out.println("Inserindo: " + c.toString());
             this.contratoRepository.insert(c);
         }catch(Exception e){
             return false;
