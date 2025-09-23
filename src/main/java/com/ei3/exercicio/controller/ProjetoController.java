@@ -17,6 +17,7 @@ import com.ei3.exercicio.domain.dto.CreateProjetoDto;
 import com.ei3.exercicio.domain.dto.ProjetoDto;
 import com.ei3.exercicio.domain.service.interfaces.ProjetoService;
 
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,7 +46,7 @@ public class ProjetoController {
     }
     
     @PostMapping()
-    public ResponseEntity<String> newProject(@RequestBody CreateProjetoDto projeto){
+    public ResponseEntity<String> newProject(@Valid @RequestBody CreateProjetoDto projeto){
 
         var criado = this.projetoService.createProject(projeto);
 
