@@ -35,4 +35,12 @@ public class Pessoa {
     }
 
     public Pessoa(){}
+
+    public Pessoa(long id){
+        this.id = id;
+    }
+      public Pessoa(String nome){
+        this.nome = nome;
+    }
+
 }
