@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.ei3.exercicio.infraestructure.entity.Contrato;
 
 public interface ContratoRepository{
-    public void insert(Contrato contrato);
+    public Contrato insert(Contrato contrato);
     public List<Contrato> getAll();
     public Optional<Contrato> getById(long id);
     public List<Contrato> getAllByPessoaId(long pessoaId);
