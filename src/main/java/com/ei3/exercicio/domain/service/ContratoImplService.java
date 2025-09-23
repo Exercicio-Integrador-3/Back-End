@@ -71,7 +71,7 @@ public class ContratoImplService implements ContratoService{
     }
 
     @Override
-    public List<ContratoDto> getById(long id) {
+    public List<ContratoDto> getContratosByPessoaId(long id) {
         return this.contratoRepository.getAllByPessoaId(id).stream().map(ContratoDto::fromModel).toList();
     }
 

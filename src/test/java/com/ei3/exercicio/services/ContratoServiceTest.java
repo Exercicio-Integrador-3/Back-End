@@ -61,8 +61,8 @@ public class ContratoServiceTest {
     public void createContratoWithValiddDateShouldReturnTrue(){
         var contrato1 = new CreateContratoDto(1,1, LocalDate.of(2025,9,22), LocalDate.of(2025, 9, 25), 40, 35.2);
         var contrato2 = new CreateContratoDto(1,2, LocalDate.of(2025, 9 ,26), LocalDate.of(2026, 03, 29), 40, 35.2);
+        this.contratoService.createContrato(contrato1);
 
-        System.out.println("Retorno da função: " + this.contratoService.createContrato(contrato1));
         assertTrue(this.contratoService.createContrato(contrato2));
     }
 }
