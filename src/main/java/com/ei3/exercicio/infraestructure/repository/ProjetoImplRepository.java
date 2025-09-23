@@ -19,8 +19,8 @@ public class ProjetoImplRepository implements ProjetoRepository{
     public ProjetoImplRepository(){}
 
     @Override
-    public void insert(Projeto projeto){
-        this.projetoRepo.save(projeto);
+    public Projeto insert(Projeto projeto){
+        return this.projetoRepo.save(projeto);
     }
 
     @Override
