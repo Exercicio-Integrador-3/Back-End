@@ -34,6 +34,27 @@ public class Projeto {
     public Projeto() {
     }
 
+    public Projeto(long id,
+            @NotBlank(message = "O nome não pode estar em branco") @Size(min = 2, max = 75, message = "O nome tem que ter entre 2 e 50 caracteres") String nome,
+            @NotNull LocalDate dataInicio, LocalDate dataFim,
+            @NotBlank(message = "A descrição não pode estar em branco") @Size(min = 2, max = 255, message = "A descrição tem que ter entre 2 e 255 caracteres") String descricao) {
+        this.id = id;
+        this.nome = nome;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.descricao = descricao;
+    }
+
+    public Projeto(
+            @NotBlank(message = "O nome não pode estar em branco") @Size(min = 2, max = 75, message = "O nome tem que ter entre 2 e 50 caracteres") String nome,
+            @NotNull LocalDate dataInicio, LocalDate dataFim,
+            @NotBlank(message = "A descrição não pode estar em branco") @Size(min = 2, max = 255, message = "A descrição tem que ter entre 2 e 255 caracteres") String descricao) {
+        this.nome = nome;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.descricao = descricao;
+    }
+
     public long getId() {
         return id;
     }
