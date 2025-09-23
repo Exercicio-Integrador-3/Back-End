@@ -8,15 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.ei3.exercicio.domain.dto.CreateProjetoDto;
 import com.ei3.exercicio.domain.dto.ProjetoDto;
 import com.ei3.exercicio.domain.service.interfaces.ProjetoService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -44,8 +44,9 @@ public class ProjetoController {
         return new ResponseEntity<Optional<ProjetoDto>>(projeto, HttpStatus.OK);
     }
     
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<String> newProject(@RequestBody CreateProjetoDto projeto){
+
         var criado = this.projetoService.createProject(projeto);
 
         if(criado){
