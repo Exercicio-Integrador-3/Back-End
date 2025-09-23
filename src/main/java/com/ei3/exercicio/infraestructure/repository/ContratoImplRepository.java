@@ -19,8 +19,8 @@ public class ContratoImplRepository implements ContratoRepository {
     public ContratoImplRepository(){}
 
     @Override
-    public Contrato insert(Contrato contrato){
-        return this.contratoRepo.save(contrato);
+    public void insert(Contrato contrato){
+        this.contratoRepo.save(contrato);
     }
 
     @Override
