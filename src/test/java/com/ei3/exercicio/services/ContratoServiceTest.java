@@ -16,9 +16,12 @@ import org.springframework.test.context.ActiveProfiles;
 import com.ei3.exercicio.domain.dto.CreateContratoDto;
 import com.ei3.exercicio.domain.service.ContratoImplService;
 
+import jakarta.transaction.Transactional;
+
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 @TestInstance(Lifecycle.PER_CLASS)
 public class ContratoServiceTest {
     

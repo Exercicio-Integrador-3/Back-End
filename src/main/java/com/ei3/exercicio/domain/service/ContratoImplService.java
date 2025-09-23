@@ -44,7 +44,7 @@ public class ContratoImplService implements ContratoService{
         }
         System.out.println("checando pessoa:");
 
-        Pessoa pessoa = pessoaRepository.getById(contratoDto.perfilId()).orElse(null);
+        Pessoa pessoa = pessoaRepository.getById(contratoDto.pessoaId()).orElse(null);
         // pessoa nao encontrada.
         if(pessoa==null){
             return false;
