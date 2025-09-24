@@ -1,7 +1,6 @@
 package com.ei3.exercicio.infraestructure.repository.interfacesJPA;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import com.ei3.exercicio.infraestructure.entity.Perfil;
 import com.ei3.exercicio.infraestructure.entity.TipoPerfil;
