@@ -10,4 +10,7 @@ public interface PessoaService {
     boolean createPessoa(CreatePessoaDto pessoaDto);
     List<PessoaDto> getAllPessoas();
     Optional<PessoaDto> getPessoaById(long id);
+    List<Long> getAllIds();
+
+
 }

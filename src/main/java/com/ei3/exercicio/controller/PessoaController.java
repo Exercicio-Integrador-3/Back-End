@@ -33,12 +33,20 @@ public class PessoaController {
         return new ResponseEntity<List<PessoaDto>>(pessoas, HttpStatus.OK);
     }
 
+    @GetMapping("/ids")
+    public ResponseEntity<List<Long>> listarIds() {
+    var ids = pessoaService.getAllIds();
+    return new ResponseEntity<>(ids, HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Optional<PessoaDto>> one(@PathVariable long id) {
         var pessoa = this.pessoaService.getPessoaById(id);
 
         return new ResponseEntity<Optional<PessoaDto>>(pessoa, HttpStatus.OK);
     }
+
 
     @PostMapping()
     public ResponseEntity<String> newPessoa(@RequestBody CreatePessoaDto pessoa){

@@ -27,6 +27,13 @@ public class PessoaImplRepository implements PessoaRepository {
     public List<Pessoa> getAll(){
         return this.pessoaRepo.findAll();
     }
+    @Override
+    public List<Long> getAllIds() {
+    return getAll().stream()
+                   .map(Pessoa::getId)
+                   .toList();
+}
+
 
     @Override
     public Optional<Pessoa> getById(long id){
