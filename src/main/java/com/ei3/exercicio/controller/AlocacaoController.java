@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ei3.exercicio.domain.dto.AlocacaoDto;
@@ -45,14 +45,14 @@ public class AlocacaoController {
     }
 
     @GetMapping("/custo/{id}")
-    public ResponseEntity<String> getCusto(@RequestParam long id){
+    public ResponseEntity<String> getCusto(@PathVariable long id){
         var custo = this.alocacaoService.custoTotal(id);
 
         return ResponseEntity.ok(String.format("%.3f", custo));
     }
 
     @GetMapping("/custo/{id}/{dataInicio}/{dataFim}")
-    public ResponseEntity<String> getCustoIntervalo(@RequestParam long id, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim){
+    public ResponseEntity<String> getCustoIntervalo(@PathVariable long id, @PathVariable LocalDate dataInicio, @PathVariable LocalDate dataFim){
         var custo = this.alocacaoService.custoPeriodo(id, dataInicio, dataFim);
 
         return ResponseEntity.ok(String.format("%.3f", custo));
