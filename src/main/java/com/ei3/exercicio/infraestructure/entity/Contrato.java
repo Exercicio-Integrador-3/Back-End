@@ -18,14 +18,8 @@ public class Contrato {
     public long Id;
 
     @ManyToOne()
-    // @JoinColumn(name = "pessoa_id", nullable = false)
-    private Pessoa pessoa;
-
-
-    @ManyToOne()
-    // @JoinColumn(name = "perfil_id", nullable = false)
-    private Perfil perfil;
-
+    private PerfilPessoa perfilPessoa;
+    
     @NotNull
     private LocalDate dataInicio;
     
@@ -38,21 +32,19 @@ public class Contrato {
     @NotNull
     private double salarioHora;
 
-    public Contrato(Pessoa pessoa, Perfil perfil, @NotNull LocalDate dataInicio, LocalDate dataFim,
+    public Contrato(PerfilPessoa perfilPessoa, @NotNull LocalDate dataInicio, LocalDate dataFim,
             @NotNull @Size(max = 40) int horasSemanais, @NotNull double salarioHora) {
-        this.pessoa = pessoa;
-        this.perfil = perfil;
+        this.perfilPessoa = perfilPessoa;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.horasSemanais = horasSemanais;
         this.salarioHora = salarioHora;
     }
 
-    public Contrato(long id, Pessoa pessoa, Perfil perfil, LocalDate dataInicio, LocalDate dataFim,
+    public Contrato(long id, PerfilPessoa perfilPessoa, LocalDate dataInicio, LocalDate dataFim,
             int horasSemanais, double salarioHora) {
         Id = id;
-        this.pessoa = pessoa;
-        this.perfil = perfil;
+        this.perfilPessoa = perfilPessoa;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.horasSemanais = horasSemanais;
@@ -67,20 +59,12 @@ public class Contrato {
         Id = id;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public PerfilPessoa getPerfilPessoa() {
+        return perfilPessoa;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setPerfilPessoa(PerfilPessoa perfilPessoa) {
+        this.perfilPessoa = perfilPessoa;
     }
 
     public LocalDate getDataInicio() {

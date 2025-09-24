@@ -20,8 +20,10 @@ import jakarta.validation.Validator;
 import com.ei3.exercicio.infraestructure.entity.Contrato;
 import com.ei3.exercicio.infraestructure.entity.Pessoa;
 import com.ei3.exercicio.infraestructure.entity.Perfil;
+import com.ei3.exercicio.infraestructure.entity.PerfilPessoa;
 import com.ei3.exercicio.infraestructure.repository.interfaces.ContratoRepository;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.ContratoRepositoryJPA;
+import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilPessoaRepositoryJPA;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilRepositoryJPA;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PessoaRepositoryJPA;
 
@@ -44,14 +46,20 @@ public class ContratoRepositoryTest {
     @Autowired
     private PessoaRepositoryJPA pessoaRepositoryJPA;
 
+    @Autowired
+    private PerfilPessoaRepositoryJPA perfilPessoaRepositoryJPA;
+
     private Pessoa p;
     private Perfil perfil;
+    private PerfilPessoa p_perfil;
 
     @BeforeEach
     public void setup(){
         perfil = this.perfilRepositoryJPA.findById(1L).get();
         p = this.pessoaRepositoryJPA.findById(1L).get();
-        contratoEntity = new Contrato(p, perfil, LocalDate.now(), LocalDate.of(2025, 12, 30), 40, 35.3);
+
+        p_perfil = this.perfilPessoaRepositoryJPA.findById(1L).get();
+        contratoEntity = new Contrato(p_perfil, LocalDate.now(), LocalDate.of(2025, 12, 30), 40, 35.3);
     }
 
     @Test
@@ -71,7 +79,7 @@ public class ContratoRepositoryTest {
     @Test
     public void gettingAllByPessoaIdShouldReturnNotNullList(){
         Contrato contrato = this.contratoRepository.insert(contratoEntity);
-        long pessoaId = this.contratoRepository.getById(contrato.Id).get().getPessoa().getId();
+        long pessoaId = this.contratoRepository.getById(contrato.Id).get().getPerfilPessoa().getPessoa().getId();
         assertNotEquals(null, contratoRepository.getAllByPessoaId(pessoaId));
     }
 
