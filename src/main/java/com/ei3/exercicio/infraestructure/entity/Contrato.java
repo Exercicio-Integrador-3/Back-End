@@ -2,10 +2,6 @@ package com.ei3.exercicio.infraestructure.entity;
 
 import java.time.LocalDate;
 
-import org.springframework.data.annotation.Persistent;
-import org.springframework.validation.annotation.Validated;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

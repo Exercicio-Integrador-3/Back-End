@@ -3,16 +3,12 @@ package com.ei3.exercicio.repositories;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,7 +26,6 @@ import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilReposito
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PessoaRepositoryJPA;
 
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @Transactional
 public class ContratoRepositoryTest {
@@ -42,9 +37,6 @@ public class ContratoRepositoryTest {
     
     @Autowired
     private Validator validator;
-
-    @Autowired
-    private ContratoRepositoryJPA contratoRepositoryJPA;
 
     @Autowired
     private PerfilRepositoryJPA perfilRepositoryJPA;
@@ -81,7 +73,6 @@ public class ContratoRepositoryTest {
         Contrato contrato = this.contratoRepository.insert(contratoEntity);
         long pessoaId = this.contratoRepository.getById(contrato.Id).get().getPessoa().getId();
         assertNotEquals(null, contratoRepository.getAllByPessoaId(pessoaId));
-        contratoRepositoryJPA.deleteAll();
     }
 
     @Test

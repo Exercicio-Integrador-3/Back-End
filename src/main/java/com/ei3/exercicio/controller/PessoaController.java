@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ei3.exercicio.domain.dto.CreatePessoaDto;
 import com.ei3.exercicio.domain.dto.PessoaDto;
@@ -33,12 +33,20 @@ public class PessoaController {
         return new ResponseEntity<List<PessoaDto>>(pessoas, HttpStatus.OK);
     }
 
+    @GetMapping("/ids")
+    public ResponseEntity<List<Long>> listarIds() {
+    var ids = pessoaService.getAllIds();
+    return new ResponseEntity<>(ids, HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<PessoaDto>> one(@RequestParam long id) {
+    public ResponseEntity<Optional<PessoaDto>> one(@PathVariable long id) {
         var pessoa = this.pessoaService.getPessoaById(id);
 
         return new ResponseEntity<Optional<PessoaDto>>(pessoa, HttpStatus.OK);
     }
+
 
     @PostMapping()
     public ResponseEntity<String> newPessoa(@RequestBody CreatePessoaDto pessoa){

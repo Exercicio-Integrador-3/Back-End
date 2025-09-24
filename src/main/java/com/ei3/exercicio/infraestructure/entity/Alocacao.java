@@ -25,6 +25,11 @@ public class Alocacao{
 
     public Alocacao(){}
 
+    public Alocacao(AlocacaoId id, @NotNull int quantidadeHoras) {
+        Id = id;
+        this.quantidadeHoras = quantidadeHoras;
+    }
+
     public Pessoa getPessoa() {
         return pessoa;
     }
