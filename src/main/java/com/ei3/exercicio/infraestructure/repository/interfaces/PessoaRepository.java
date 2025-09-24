@@ -9,4 +9,6 @@ public interface PessoaRepository {
     void insert(Pessoa pessoa);
     List<Pessoa> getAll();
     Optional<Pessoa> getById(long id);
+    List<Long> getAllIds();
+
 }
