@@ -16,9 +16,8 @@ import com.ei3.exercicio.infraestructure.entity.Contrato;
 import com.ei3.exercicio.infraestructure.entity.Projeto;
 import com.ei3.exercicio.infraestructure.repository.interfaces.AlocacaoRepository;
 import com.ei3.exercicio.infraestructure.repository.interfaces.ContratoRepository;
-import com.ei3.exercicio.infraestructure.repository.interfaces.PessoaRepository;
 import com.ei3.exercicio.infraestructure.repository.interfaces.ProjetoRepository;
-import com.ei3.exercicio.infraestructure.repository.interfacesJPA.AlocacaoRepositoryJPA;
+import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilPessoaRepositoryJPA;
 
 @Service
 public class AlocacaoImplService implements AlocacaoService{
@@ -27,27 +26,24 @@ public class AlocacaoImplService implements AlocacaoService{
     private AlocacaoRepository alocacaoRepository;
 
     @Autowired
-    private AlocacaoRepositoryJPA alocacaoRepositoryJPA;
-
-    @Autowired
     private ProjetoRepository projetoRepository;
 
     @Autowired
     private ContratoRepository contratoRepository;
 
     @Autowired
-    private PessoaRepository pessoaRepository;
+    private PerfilPessoaRepositoryJPA perfilPessoaRepository;
 
     public AlocacaoImplService(){}
 
     public boolean createAlocacao(CreateAlocacaoDto alocacaoDto){
-        var pessoa = pessoaRepository.getById(alocacaoDto.idPessoa()).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+        var perfilPessoa = perfilPessoaRepository.findByPessoaId(alocacaoDto.idPessoa()).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
         var projeto = projetoRepository.getById(alocacaoDto.idProjeto()).orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         AlocacaoId aId = new AlocacaoId(alocacaoDto.idPessoa(), alocacaoDto.idProjeto());
         Alocacao a = new Alocacao(aId, alocacaoDto.quantidadeHoras());
 
-        a.setPessoa(pessoa);
+        a.setPessoa(perfilPessoa);
         a.setProjeto(projeto);
 
         this.alocacaoRepository.insert(a);
@@ -58,7 +54,7 @@ public class AlocacaoImplService implements AlocacaoService{
     public List<AlocacaoDto> getAllAlocacao(){
         return this.alocacaoRepository.all()
         .stream()
-        .map(a -> new AlocacaoDto(a.getPessoa().getId(), a.getProjeto().getId(), a.getQuantidadeHoras()))
+        .map(a -> new AlocacaoDto(a.getPerfilPessoa().getPessoa().getId(), a.getProjeto().getId(), a.getQuantidadeHoras()))
         .toList();
     }
 
@@ -74,10 +70,10 @@ public class AlocacaoImplService implements AlocacaoService{
 
     double total = 0.0;
 
-    List<Alocacao> alocacoes = alocacaoRepositoryJPA.findByProjetoId(idProjeto);
+    List<Alocacao> alocacoes = alocacaoRepository.findByProjetoId(idProjeto);
 
     for (Alocacao a : alocacoes) {
-        List<Contrato> contratos = contratoRepository.getAllByPessoaId(a.getPessoa().getId());
+        List<Contrato> contratos = contratoRepository.getAllByPessoaId(a.getPerfilPessoa().getPessoa().getId());
 
         for (Contrato c : contratos) {
             boolean valido = !c.getDataFim().isBefore(inicio) && !c.getDataInicio().isAfter(fim);
@@ -97,10 +93,10 @@ public class AlocacaoImplService implements AlocacaoService{
 
     double total = 0.0;
 
-    List<Alocacao> alocacoes = alocacaoRepositoryJPA.findByProjetoId(idProjeto);
+    List<Alocacao> alocacoes = alocacaoRepository.findByProjetoId(idProjeto);
 
     for (Alocacao alocacao : alocacoes) {
-        Long pessoaId = alocacao.getPessoa().getId();
+        Long pessoaId = alocacao.getPerfilPessoa().getPessoa().getId();
 
         List<Contrato> contratos = contratoRepository.getAllByPessoaId(pessoaId);
 

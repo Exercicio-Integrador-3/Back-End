@@ -10,4 +10,5 @@ public interface ContratoRepository{
     public List<Contrato> getAll();
     public Optional<Contrato> getById(long id);
     public List<Contrato> getAllByPessoaId(long pessoaId);
+    public List<Contrato> findAllByPerfilPessoaId(long perfilPessoaId);
 }

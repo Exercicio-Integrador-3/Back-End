@@ -12,9 +12,9 @@ public class Alocacao{
     @EmbeddedId
     private AlocacaoId Id;
 
-    @MapsId("idPessoa")
+    @MapsId("idPerfilPessoa")
     @ManyToOne
-    private Pessoa pessoa;
+    private PerfilPessoa perfilPessoa;
     
     @MapsId("idProjeto")
     @ManyToOne
@@ -30,12 +30,12 @@ public class Alocacao{
         this.quantidadeHoras = quantidadeHoras;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public PerfilPessoa getPerfilPessoa() {
+        return perfilPessoa;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setPessoa(PerfilPessoa perfilPessoa) {
+        this.perfilPessoa = perfilPessoa;
     }
 
     public Projeto getProjeto() {

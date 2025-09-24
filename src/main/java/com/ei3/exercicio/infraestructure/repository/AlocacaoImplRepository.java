@@ -24,4 +24,8 @@ public class AlocacaoImplRepository implements AlocacaoRepository{
     public List<Alocacao> all(){
         return this.alocacaoRepo.findAll();
     }
+
+    public List<Alocacao> findByProjetoId(Long projetoId){
+        return this.alocacaoRepo.findByProjetoId(projetoId);
+    }
 }
