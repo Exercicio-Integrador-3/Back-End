@@ -1,6 +1,5 @@
 package com.ei3.exercicio.infraestructure.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +22,6 @@ public class AlocacaoImplRepository implements AlocacaoRepository{
     } 
 
     public List<Alocacao> all(){
-        return this.alocacaoRepo.findAll();
-    }
-
-    public List<Alocacao> custoPeriodo(LocalDate dataInicio, LocalDate dataFim){
-        return this.alocacaoRepo.findAll();
-    }
-
-    public List<Alocacao> custoTotal(){
         return this.alocacaoRepo.findAll();
     }
 }
