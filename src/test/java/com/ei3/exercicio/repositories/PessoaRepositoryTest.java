@@ -58,6 +58,6 @@ public void shouldAddPessoa() {
         pessoaRepository.insert(pessoa);
         Optional<Pessoa> finded = pessoaRepository.getById(pessoa.getId());
         assertTrue(finded.isPresent());
-        assertEquals("João da Silva", finded.get().getNome());
+        assertEquals("Pessoa Teste", finded.get().getNome());
     }
 }
