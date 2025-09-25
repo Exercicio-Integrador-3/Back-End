@@ -46,7 +46,7 @@ public class ContratoController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
-        return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 
     }
 
