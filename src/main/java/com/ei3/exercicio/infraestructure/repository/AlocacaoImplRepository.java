@@ -17,8 +17,8 @@ public class AlocacaoImplRepository implements AlocacaoRepository{
 
     public AlocacaoImplRepository(){}
 
-    public void insert(Alocacao alocacao){
-        this.alocacaoRepo.save(alocacao);
+    public Alocacao insert(Alocacao alocacao){
+        return this.alocacaoRepo.save(alocacao);
     } 
 
     public List<Alocacao> all(){
