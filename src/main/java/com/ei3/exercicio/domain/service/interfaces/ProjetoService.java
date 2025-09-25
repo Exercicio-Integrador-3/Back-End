@@ -10,4 +10,6 @@ public interface ProjetoService {
     boolean createProject(CreateProjetoDto projetoDto);
     List<ProjetoDto> getAllProjetos();
     Optional<ProjetoDto> getProjetoById(long id);
+    List<Long> getAllIds();
+
 }
