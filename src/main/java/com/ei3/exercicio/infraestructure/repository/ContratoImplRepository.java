@@ -38,7 +38,8 @@ public class ContratoImplRepository implements ContratoRepository {
         return this.contratoRepo.findAllByPessoaId(pessoaId);
     }
 
-
-
-    
+    @Override
+    public List<Contrato> findAllByPerfilPessoaId(long perfilPessoaId){
+        return this.contratoRepo.findAllByPerfilPessoaId(perfilPessoaId);
+    }
 }

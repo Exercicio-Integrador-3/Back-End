@@ -31,12 +31,12 @@ public class ProjetoImplService implements ProjetoService{
     public List<ProjetoDto> getAllProjetos(){
         return this.projetoRepository.getAll()
         .stream()
-        .map(p -> new ProjetoDto(p.getId(), p.getNome(), p.getDataInicio(), p.getDataFim(), p.getDescricao()))
+        .map(ProjetoDto::fromModel)
         .toList();
     }
 
     public Optional<ProjetoDto> getProjetoById(long id){
         return this.projetoRepository.getById(id)
-        .map(p -> new ProjetoDto(p.getId(), p.getNome(), p.getDataInicio(), p.getDataFim(), p.getDescricao()));
+        .map(ProjetoDto::fromModel);
     }
 }

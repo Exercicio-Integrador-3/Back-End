@@ -18,13 +18,9 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 
 import com.ei3.exercicio.infraestructure.entity.Contrato;
-import com.ei3.exercicio.infraestructure.entity.Pessoa;
-import com.ei3.exercicio.infraestructure.entity.Perfil;
+import com.ei3.exercicio.infraestructure.entity.PerfilPessoa;
 import com.ei3.exercicio.infraestructure.repository.interfaces.ContratoRepository;
-import com.ei3.exercicio.infraestructure.repository.interfacesJPA.ContratoRepositoryJPA;
-import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilRepositoryJPA;
-import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PessoaRepositoryJPA;
-
+import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilPessoaRepositoryJPA;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
@@ -39,26 +35,21 @@ public class ContratoRepositoryTest {
     private Validator validator;
 
     @Autowired
-    private PerfilRepositoryJPA perfilRepositoryJPA;
+    private PerfilPessoaRepositoryJPA perfilPessoaRepositoryJPA;
 
-    @Autowired
-    private PessoaRepositoryJPA pessoaRepositoryJPA;
-
-    private Pessoa p;
-    private Perfil perfil;
+    private PerfilPessoa p_perfil;
 
     @BeforeEach
     public void setup(){
-        perfil = this.perfilRepositoryJPA.findById(1L).get();
-        p = this.pessoaRepositoryJPA.findById(1L).get();
-        contratoEntity = new Contrato(p, perfil, LocalDate.now(), LocalDate.of(2025, 12, 30), 40, 35.3);
+        p_perfil = this.perfilPessoaRepositoryJPA.findById(1L).get();
+        contratoEntity = new Contrato(p_perfil, LocalDate.now(), LocalDate.of(2025, 12, 30), 40, 35.3);
     }
 
     @Test
     public void shouldAdd(){
         this.contratoRepository.insert(contratoEntity);
         int actual = this.contratoRepository.getAll().size();
-        assertEquals(1, actual);
+        assertEquals(2, actual); //já temos um contrato no banco
 
     }
     
@@ -71,7 +62,7 @@ public class ContratoRepositoryTest {
     @Test
     public void gettingAllByPessoaIdShouldReturnNotNullList(){
         Contrato contrato = this.contratoRepository.insert(contratoEntity);
-        long pessoaId = this.contratoRepository.getById(contrato.Id).get().getPessoa().getId();
+        long pessoaId = this.contratoRepository.getById(contrato.Id).get().getPerfilPessoa().getPessoa().getId();
         assertNotEquals(null, contratoRepository.getAllByPessoaId(pessoaId));
     }
 
