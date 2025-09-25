@@ -42,6 +42,13 @@ public class ProjetoController {
         return new ResponseEntity<Optional<ProjetoDto>>(projeto, HttpStatus.OK);
     }
     
+    @GetMapping("/projeto-ids")
+    public ResponseEntity<List<Long>> listarIds() {
+    var ids = projetoService.getAllIds();
+    return new ResponseEntity<>(ids, HttpStatus.OK);
+}
+
+    
     @PostMapping()
     public ResponseEntity<String> newProject(@RequestBody CreateProjetoDto projeto){
 

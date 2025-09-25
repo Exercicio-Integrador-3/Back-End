@@ -35,6 +35,14 @@ public class ProjetoImplService implements ProjetoService{
         .toList();
     }
 
+    @Override
+    public List<Long> getAllIds() {
+         return projetoRepository.getAll()
+        .stream()
+        .map(Projeto::getId)
+        .toList();
+    }
+
     public Optional<ProjetoDto> getProjetoById(long id){
         return this.projetoRepository.getById(id)
         .map(ProjetoDto::fromModel);
