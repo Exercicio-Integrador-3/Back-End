@@ -1,7 +1,7 @@
 package com.ei3.exercicio.domain.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,15 +93,29 @@ public class AlocacaoImplService implements AlocacaoService{
         .toList();
     }
 
-    public double custoPeriodo(long idProjeto, LocalDate dataInicio, LocalDate dataFim) { //considerar finais de semana (não são dias úteis)
+    private long contarDiasUteis(LocalDate inicio, LocalDate fim) {
+        long diasUteis = 0;
+        LocalDate data = inicio;
+
+        while (!data.isAfter(fim)) {
+            DayOfWeek dia = data.getDayOfWeek();
+            if (dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY) {
+                diasUteis++;
+            }
+            data = data.plusDays(1);
+        }
+
+        return diasUteis; 
+    }
+
+    public double custoPeriodo(long idProjeto, LocalDate dataInicio, LocalDate dataFim) {
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         LocalDate inicio = dataInicio.isBefore(projeto.getDataInicio()) ? projeto.getDataInicio() : dataInicio;
         LocalDate fim = dataFim.isAfter(projeto.getDataFim()) ? projeto.getDataFim() : dataFim;
 
-        long diasPeriodo = ChronoUnit.DAYS.between(inicio, fim) + 1;
-        long diasProjeto = ChronoUnit.DAYS.between(projeto.getDataInicio(), projeto.getDataFim()) + 1;
+        long diasPeriodo = contarDiasUteis(inicio, fim);
 
         double total = 0.0;
 
@@ -113,8 +127,14 @@ public class AlocacaoImplService implements AlocacaoService{
             for (Contrato c : contratos) {
                 boolean valido = !c.getDataFim().isBefore(inicio) && !c.getDataInicio().isAfter(fim);
                 if (valido) {
-                    double horasNoPeriodo = a.getQuantidadeHoras() * ((double) diasPeriodo / diasProjeto);
-                    total += horasNoPeriodo * c.getSalarioHora();
+                    //horas por dia = 35 horas por semana / 5
+                    int hDia = c.getHorasSemanais() / 5;
+                    int totalHoras = hDia * (int)diasPeriodo;
+                    if(totalHoras>=a.getQuantidadeHoras()){
+                        total += a.getQuantidadeHoras() * c.getSalarioHora();
+                    }  else{
+                        total += totalHoras * c.getSalarioHora();
+                    }
                 }
             }
         }
@@ -122,7 +142,7 @@ public class AlocacaoImplService implements AlocacaoService{
         return total;
     }
 
-    public double custoTotal(long idProjeto) {  //considerar finais de semana (não são dias úteis)
+    public double custoTotal(long idProjeto) {
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
@@ -132,20 +152,28 @@ public class AlocacaoImplService implements AlocacaoService{
 
         for (Alocacao alocacao : alocacoes) {
             Long pessoaId = alocacao.getPerfilPessoa().getPessoa().getId();
-
             List<Contrato> contratos = contratoRepository.getAllByPessoaId(pessoaId);
 
             for (Contrato contrato : contratos) {
-                boolean cobrePeriodo = !contrato.getDataFim().isBefore(projeto.getDataInicio())
-                                    && !contrato.getDataInicio().isAfter(projeto.getDataFim());
+                LocalDate inicio = contrato.getDataInicio().isBefore(projeto.getDataInicio())
+                        ? projeto.getDataInicio()
+                        : contrato.getDataInicio();
 
-                if (cobrePeriodo) {
-                    total += alocacao.getQuantidadeHoras() * contrato.getSalarioHora();
+                LocalDate fim = contrato.getDataFim().isAfter(projeto.getDataFim())
+                        ? projeto.getDataFim()
+                        : contrato.getDataFim();
+
+                if (!inicio.isAfter(fim)) {
+                    long semanasUteis = contarDiasUteis(inicio, fim);
+                    long maxHorasContrato = semanasUteis * contrato.getHorasSemanais();
+
+                    long horasTrabalhadas = Math.min(alocacao.getQuantidadeHoras(), maxHorasContrato);
+
+                    total += horasTrabalhadas * contrato.getSalarioHora();
                 }
             }
         }
 
         return total;
     }
-
 }
