@@ -53,4 +53,9 @@ public class Alocacao{
     public void setQuantidadeHoras(int quantidadeHoras) {
         this.quantidadeHoras = quantidadeHoras;
     }
+
+    public AlocacaoId getId() {
+        return Id;
+    }
+
 }
