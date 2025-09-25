@@ -93,7 +93,7 @@ public class AlocacaoImplService implements AlocacaoService{
         .toList();
     }
 
-    public double custoPeriodo(long idProjeto, LocalDate dataInicio, LocalDate dataFim) {
+    public double custoPeriodo(long idProjeto, LocalDate dataInicio, LocalDate dataFim) { //considerar finais de semana (não são dias úteis)
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
@@ -122,7 +122,7 @@ public class AlocacaoImplService implements AlocacaoService{
         return total;
     }
 
-    public double custoTotal(long idProjeto) {
+    public double custoTotal(long idProjeto) {  //considerar finais de semana (não são dias úteis)
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
