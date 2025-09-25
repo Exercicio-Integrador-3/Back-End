@@ -49,7 +49,7 @@ public class ContratoRepositoryTest {
     public void shouldAdd(){
         this.contratoRepository.insert(contratoEntity);
         int actual = this.contratoRepository.getAll().size();
-        assertEquals(1, actual);
+        assertEquals(2, actual); //já temos um contrato no banco
 
     }
     
