@@ -2,6 +2,7 @@ package com.ei3.exercicio.domain.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,34 +49,51 @@ public class AlocacaoImplService implements AlocacaoService{
 
     public AlocacaoImplService(){}
 
+    @Override
     public boolean createAlocacao(CreateAlocacaoDto alocacaoDto) {
-        Perfil perfil = perfilRepository.getById(alocacaoDto.idPerfil()).orElse(null);
-        if (perfil == null) return false;
+        // checar se os perfis existem
+        List<Perfil> perfis = alocacaoDto.idsPerfil().stream().map(id -> perfilRepository.getById(id).orElse(null)).toList();
+        if (perfis.contains(null)) return false;
 
-        Pessoa pessoa = pessoaRepository.getById(alocacaoDto.idPessoa()).orElse(null);
-        if (pessoa == null) return false;
+        // checar se as pessoas existem 
+        List<Pessoa> pessoas = alocacaoDto.idsPessoas().stream().map(id -> pessoaRepository.getById(id).orElse(null)).toList();
         
+        if (pessoas.contains(null)) return false;
+        // checar se o projeto existe
         Projeto projeto = projetoRepository.getById(alocacaoDto.idProjeto()).orElse(null);
         if (projeto == null) return false;
 
-        PerfilPessoa pp = perfilPessoaRepository
-                .findByPessoaId(pessoa.getId())
-                .filter(ppTemp -> ppTemp.getPerfil().getId() == perfil.getId())
-                .orElseGet(() -> this.perfilPessoaRepository.insert(new PerfilPessoa(pessoa, perfil)));
+        // pegar perfis pessoas.
+        List<PerfilPessoa> pps = pessoas.stream()
+                                        .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
+                                        .toList();
 
-        List<Alocacao> alocacoesProjeto = alocacaoRepository.findByProjetoId(alocacaoDto.idProjeto());
+        
+        // pegar alocacoes desse projeto
+        List<Alocacao> alocacoes = this.alocacaoRepository.findByProjetoId(alocacaoDto.idProjeto());  
 
-        boolean pessoaJaAlocada = alocacoesProjeto.stream()
-                .anyMatch(a -> a.getPerfilPessoa().getPessoa().getId() == pessoa.getId());
-        if (pessoaJaAlocada) return false;
+        // checa se esta vazio
+        if(!alocacoes.isEmpty()){
+            //se nao estiver ve se alguem da lista para inserção ja possui uma função alocada.
+            boolean match = alocacoes.stream().anyMatch((al) -> pps.contains(al.getPerfilPessoa()));
+            if(match){
+                return false;
+            }
+        }
 
-        long qtdGerentes = alocacoesProjeto.stream()
-                .filter(a -> a.getPerfilPessoa().getPerfil().getTipo() == TipoPerfil.GERENTE)
-                .count();
+        boolean qtdGerentes = alocacoes.stream()
+                .anyMatch(a -> a.getPerfilPessoa().getPerfil().getTipo() == TipoPerfil.GERENTE);
 
-        if (perfil.getTipo() == TipoPerfil.GERENTE && qtdGerentes >= 1) {
+        // checa se esta tentando inserir um gerente
+        boolean tentaInserirGerente = alocacaoDto.idsPerfil().stream().anyMatch(e -> this.perfilRepository.getById(e).get().tipo == TipoPerfil.GERENTE);
+        if (tentaInserirGerente && qtdGerentes) {
             return false;
         }
+
+        
+        List<PerfilPessoa> pessoasPerfisParaCriar = pessoas.stream()
+                                        .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
+                                        .toList();
 
         AlocacaoId alocacaoId = new AlocacaoId(pp.getId(), alocacaoDto.idProjeto());
         Alocacao a = new Alocacao(alocacaoId, alocacaoDto.quantidadeHoras());
@@ -85,7 +103,8 @@ public class AlocacaoImplService implements AlocacaoService{
 
         return true;
     }
-
+    
+    @Override
     public List<AlocacaoDto> getAllAlocacao(){
         return this.alocacaoRepository.all()
         .stream()
@@ -108,6 +127,7 @@ public class AlocacaoImplService implements AlocacaoService{
         return diasUteis; 
     }
 
+    @Override
     public double custoPeriodo(long idProjeto, LocalDate dataInicio, LocalDate dataFim) {
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
@@ -142,6 +162,7 @@ public class AlocacaoImplService implements AlocacaoService{
         return total;
     }
 
+    @Override
     public double custoTotal(long idProjeto) {
         Projeto projeto = projetoRepository.getById(idProjeto)
             .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
