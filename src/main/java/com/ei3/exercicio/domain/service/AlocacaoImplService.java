@@ -151,6 +151,7 @@ public class AlocacaoImplService implements AlocacaoService{
         return true;
     }
     
+    
     @Override
     public List<AlocacaoDto> getAllAlocacao(){
         return this.alocacaoRepository.all()
