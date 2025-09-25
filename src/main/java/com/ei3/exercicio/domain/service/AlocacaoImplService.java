@@ -89,7 +89,7 @@ public class AlocacaoImplService implements AlocacaoService{
     public List<AlocacaoDto> getAllAlocacao(){
         return this.alocacaoRepository.all()
         .stream()
-        .map(a -> new AlocacaoDto(a.getPerfilPessoa().getPessoa().getId(), a.getProjeto().getId(), a.getQuantidadeHoras()))
+        .map(AlocacaoDto::fromModel)
         .toList();
     }
 
