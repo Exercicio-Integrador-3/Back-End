@@ -41,7 +41,7 @@ public class ProjetoRepositoryTest {
     public void shouldAdd(){
         this.projetoRepository.insert(projetoEntity);
         int actual = this.projetoRepository.getAll().size();
-        assertEquals(1, actual);
+        assertEquals(2, actual); //já tem um projeto no banco
     }
 
     @Test
