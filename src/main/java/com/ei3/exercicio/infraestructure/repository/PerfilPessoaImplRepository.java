@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ei3.exercicio.infraestructure.entity.PerfilPessoa;
+import com.ei3.exercicio.infraestructure.entity.TipoPerfil;
 import com.ei3.exercicio.infraestructure.repository.interfaces.PerfilPessoaRepository;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilPessoaRepositoryJPA;
 
@@ -28,4 +29,9 @@ public class PerfilPessoaImplRepository implements PerfilPessoaRepository{
     public PerfilPessoa insert(PerfilPessoa perfilPessoa){
         return this.perfilPessoaRepositoryJPA.save(perfilPessoa);
     }
+
+    public List<PerfilPessoa> findAllByPessoaId(long pessoaId){
+        return this.perfilPessoaRepositoryJPA.findAll().stream().filter(pp -> pp.getPessoa().getId() == pessoaId).toList();
+    }
+
 }

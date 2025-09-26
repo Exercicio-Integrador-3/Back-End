@@ -2,8 +2,10 @@ package com.ei3.exercicio.domain.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,18 +65,25 @@ public class AlocacaoImplService implements AlocacaoService{
         Projeto projeto = projetoRepository.getById(alocacaoDto.idProjeto()).orElse(null);
         if (projeto == null) return false;
 
-        // pegar perfis pessoas.
+        boolean temDuplicadas = alocacaoDto.idsPessoas().stream()
+                                            .collect(Collectors.toSet())
+                                            .size() != alocacaoDto.idsPessoas().size(); 
+        if(temDuplicadas){
+            return false;
+        }
+                                            // pegar perfis pessoas.
         List<PerfilPessoa> pps = pessoas.stream()
                                         .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
                                         .toList();
 
         
+
         // pegar alocacoes desse projeto
         List<Alocacao> alocacoes = this.alocacaoRepository.findByProjetoId(alocacaoDto.idProjeto());  
 
         // checa se esta vazio
         if(!alocacoes.isEmpty()){
-            //se nao estiver ve se alguem da lista para inserção ja possui uma função alocada.
+            //ver se alguem da lista para inserção ja possui uma função alocada.
             boolean match = alocacoes.stream().anyMatch((al) -> pps.contains(al.getPerfilPessoa()));
             if(match){
                 return false;
@@ -84,23 +93,42 @@ public class AlocacaoImplService implements AlocacaoService{
         boolean qtdGerentes = alocacoes.stream()
                 .anyMatch(a -> a.getPerfilPessoa().getPerfil().getTipo() == TipoPerfil.GERENTE);
 
+
         // checa se esta tentando inserir um gerente
         boolean tentaInserirGerente = alocacaoDto.idsPerfil().stream().anyMatch(e -> this.perfilRepository.getById(e).get().tipo == TipoPerfil.GERENTE);
+        //mapa de id pessoas --- perfil para alocar
+        Map<Long, TipoPerfil> mapa = new HashMap<>(); 
+        //popula um mapa para saber o que cada pessoa irá ser.
+        
+        for(int i = 0; i < alocacaoDto.idsPessoas().size(); i++){
+            mapa.put(alocacaoDto.idsPessoas().get(i), this.perfilRepository.getById(alocacaoDto.idsPerfil().get(i)).get().getTipo());
+        }
+        
         if (tentaInserirGerente && qtdGerentes) {
             return false;
         }
 
-        
-        List<PerfilPessoa> pessoasPerfisParaCriar = pessoas.stream()
-                                        .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
-                                        .toList();
-
-        AlocacaoId alocacaoId = new AlocacaoId(pp.getId(), alocacaoDto.idProjeto());
-        Alocacao a = new Alocacao(alocacaoId, alocacaoDto.quantidadeHoras());
-        a.setPessoa(pp); 
-        a.setProjeto(this.projetoRepository.getById(alocacaoId.getIdProjeto()).get());
-        this.alocacaoRepository.insert(a);
-
+        for(long key : mapa.keySet()){
+            //perfis de cada  pessoa
+            var perfisDaPessoa = this.perfilPessoaRepository.findAllByPessoaId(key).stream().map(p -> p.getPerfil().tipo).toList();
+            PerfilPessoa perfilPessoa;
+            Perfil perfil;
+            //checa se aquela pessoa tem o perfil ja existente
+            if(!perfisDaPessoa.contains(mapa.get(key))){
+                //se nao existe, cria.
+                perfil = new Perfil();
+                perfil.setTipo(mapa.get(key));
+                perfilPessoa = this.perfilPessoaRepository.insert(new PerfilPessoa(this.pessoaRepository.getById(key).get(), perfil));
+            }else{
+                // se existe busca do repositório
+                perfilPessoa = this.perfilPessoaRepository.findByPessoaIdAndTipoPerfil(key, mapa.get(key)).get();
+            }
+            AlocacaoId alocacaoId = new AlocacaoId(perfilPessoa.getId(), alocacaoDto.idProjeto());
+            Alocacao aloc = new Alocacao(alocacaoId, alocacaoDto.quantidadeHoras());
+            aloc.setPessoa(perfilPessoa);
+            aloc.setProjeto(projeto);
+            this.alocacaoRepository.insert(aloc);
+        }
         return true;
     }
     

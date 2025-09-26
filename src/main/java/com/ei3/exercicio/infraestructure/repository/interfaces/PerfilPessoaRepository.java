@@ -9,4 +9,5 @@ public interface PerfilPessoaRepository {
     List<PerfilPessoa> findByPessoaId(long pessoaId);
     Optional<PerfilPessoa> findById(long perfilPessoaId);
     PerfilPessoa insert(PerfilPessoa perfilPessoa);
+    List<PerfilPessoa> findAllByPessoaId(long pessoaId);
 }
