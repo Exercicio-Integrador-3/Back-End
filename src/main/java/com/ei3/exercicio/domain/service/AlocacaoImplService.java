@@ -60,7 +60,9 @@ public class AlocacaoImplService implements AlocacaoService{
 
         PerfilPessoa pp = perfilPessoaRepository
                 .findByPessoaId(pessoa.getId())
+                .stream()
                 .filter(ppTemp -> ppTemp.getPerfil().getId() == perfil.getId())
+                .findFirst()
                 .orElseGet(() -> this.perfilPessoaRepository.insert(new PerfilPessoa(pessoa, perfil)));
 
         List<Alocacao> alocacoesProjeto = alocacaoRepository.findByProjetoId(alocacaoDto.idProjeto());

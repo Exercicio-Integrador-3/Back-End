@@ -1,5 +1,6 @@
 package com.ei3.exercicio.infraestructure.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class PerfilPessoaImplRepository implements PerfilPessoaRepository{
 
     public PerfilPessoaImplRepository(){}
 
-    public Optional<PerfilPessoa> findByPessoaId(long pessoaId){
+    public List<PerfilPessoa> findByPessoaId(long pessoaId){
         return this.perfilPessoaRepositoryJPA.findByPessoaId(pessoaId);
     }
     
