@@ -7,10 +7,9 @@ import com.ei3.exercicio.infraestructure.entity.PerfilPessoa;
 import com.ei3.exercicio.infraestructure.entity.TipoPerfil;
 
 public interface PerfilPessoaRepository {
-    List<PerfilPessoa> findByPessoaId(long pessoaId);
+    Optional<PerfilPessoa> findByPessoaId(long pessoaId);
+    Optional<PerfilPessoa> findByPessoaIdAndTipoPerfil(long pessoaId, TipoPerfil tipoPerfil);
     Optional<PerfilPessoa> findById(long perfilPessoaId);
     PerfilPessoa insert(PerfilPessoa perfilPessoa);
     List<PerfilPessoa> findAllByPessoaId(long pessoaId);
-    Optional<PerfilPessoa> findByPessoaIdAndTipoPerfil(long pessoaId, TipoPerfil tipoPerfil);
-
 }

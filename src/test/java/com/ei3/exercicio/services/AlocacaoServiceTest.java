@@ -132,7 +132,6 @@ public class AlocacaoServiceTest {
         var alocacao1 = new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 200);
         assertFalse(this.alocacaoService.createAlocacao(alocacao1));
 
-
     }
 
     @Test
@@ -188,6 +187,6 @@ public class AlocacaoServiceTest {
         this.alocacaoService.createAlocacao(new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 120));
 
         assertEquals(0, this.alocacaoService.custoPeriodo(1, LocalDate.of(2024, 10, 31), LocalDate.of(2024, 11, 5)));
-    }
 
+    }
 }
