@@ -154,7 +154,21 @@ public class AlocacaoImplService implements AlocacaoService{
             aloc.setProjeto(projeto);
             this.alocacaoRepository.insert(aloc);
         }
+        alocacoes = this.alocacaoRepository.findByProjetoId(alocacaoDto.idProjeto());
+        if(contemPerfisNecessarios(alocacoes) && dataCorreta(projeto)){
+            projeto.setIs_active(true);
+            this.projetoRepository.updateStatus(projeto);
+        }
         return true;
+    }
+
+    private boolean contemPerfisNecessarios(List<Alocacao> lista){
+        List<TipoPerfil> allTipoPerfis = List.of(TipoPerfil.GERENTE, TipoPerfil.DEV, TipoPerfil.QA);
+        List<TipoPerfil> listaToTipoPerfil = lista.stream().map(al -> al.getPerfilPessoa().getPerfil().getTipo()).toList();
+        return    listaToTipoPerfil.containsAll(allTipoPerfis);
+    }
+    private boolean dataCorreta(Projeto p){
+        return (p.getDataInicio().isBefore(LocalDate.now()) || p.getDataInicio().isEqual(LocalDate.now())) && p.getDataFim().isAfter(LocalDate.now());
     }
     
     

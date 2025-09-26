@@ -32,4 +32,8 @@ public class ProjetoImplRepository implements ProjetoRepository{
     public Optional<Projeto> getById(long id){
         return this.projetoRepo.findById(id);
     }
+
+    public void updateStatus(Projeto projeto){
+        this.projetoRepo.save(projeto);
+    }
 }
