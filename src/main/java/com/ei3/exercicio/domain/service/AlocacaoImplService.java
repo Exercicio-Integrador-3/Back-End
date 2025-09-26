@@ -2,6 +2,7 @@ package com.ei3.exercicio.domain.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,10 +87,15 @@ public class AlocacaoImplService implements AlocacaoService{
         
 
         // pegar perfis pessoas.
-        List<PerfilPessoa> pps = pessoas.stream()
-                                        .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
+        List<List<PerfilPessoa>> ppsAux = pessoas.stream()
+                                        .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()))
                                         .toList();
 
+        List<PerfilPessoa> pps = new ArrayList<>();
+
+        for(var aux : ppsAux){
+            pps.addAll(aux);
+        }
         
 
         // pegar alocacoes desse projeto
@@ -128,7 +134,7 @@ public class AlocacaoImplService implements AlocacaoService{
         
         for(long key : mapa.keySet()){
             //perfis de cada pessoa
-            var perfisDaPessoa = this.perfilPessoaRepository.findAllByPessoaId(key).stream().map(p -> p.getPerfil().tipo).toList();
+            var perfisDaPessoa = this.perfilPessoaRepository.findById(key).stream().map(p -> p.getPerfil().tipo).toList();
             PerfilPessoa perfilPessoa;
             Perfil perfil;
             //checa se aquela pessoa tem o perfil ja existente

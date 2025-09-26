@@ -48,7 +48,7 @@ public class ContratoImplService implements ContratoService{
         PerfilPessoa ppNovo; 
 
         if(perfilPessoa.isPresent()){ //perfil pessoa existe um ou mais
-            var contratos = this.contratoRepository.findAllByPerfilPessoaId(perfilPessoa.get().getId()); //contratos pelo id do perfil da pessoa
+            var contratos = this.contratoRepository.getAllByPessoaId(pessoa.getId()); //contratos pelo id do perfil da pessoa
             if(!contratos.isEmpty()){
                 boolean resp = contratos.stream().filter(c -> c.getDataFim().isAfter(contratoDto.dataInicio())).toList().isEmpty(); //verifica se tem algum contrato nesse período (ativo)
                 if(!resp){

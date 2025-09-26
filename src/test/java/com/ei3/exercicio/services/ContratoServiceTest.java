@@ -53,7 +53,7 @@ public class ContratoServiceTest {
         var contrato1 = new CreateContratoDto(2,1, LocalDate.of(2025,9,22), LocalDate.of(2025, 9, 25), 40, 35.2);
         var contrato2 = new CreateContratoDto(2,2, LocalDate.of(2025, 9 ,24), LocalDate.of(2026, 03, 29), 40, 35.2);
 
-        this.contratoService.createContrato(contrato1);
+        boolean result = this.contratoService.createContrato(contrato1);
         assertFalse(this.contratoService.createContrato(contrato2));
     }
 

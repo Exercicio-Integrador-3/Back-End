@@ -30,10 +30,6 @@ public class PerfilPessoaImplRepository implements PerfilPessoaRepository{
         return this.perfilPessoaRepositoryJPA.save(perfilPessoa);
     }
 
-    public List<PerfilPessoa> findAllByPessoaId(long pessoaId){
-        return this.perfilPessoaRepositoryJPA.findAll().stream().filter(pp -> pp.getPessoa().getId() == pessoaId).toList();
-    }
-
     @Override
     public Optional<PerfilPessoa> findByPessoaIdAndTipoPerfil(long pessoaId, TipoPerfil tipoPerfil) {
         return this.perfilPessoaRepositoryJPA.findAll().stream().filter(pp-> pp.getPerfil().getTipo() == tipoPerfil).findFirst();
