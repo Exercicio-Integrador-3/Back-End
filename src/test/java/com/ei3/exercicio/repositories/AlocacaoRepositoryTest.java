@@ -1,27 +1,30 @@
 package com.ei3.exercicio.repositories;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.ei3.exercicio.infraestructure.entity.Alocacao;
 import com.ei3.exercicio.infraestructure.entity.AlocacaoId;
+import com.ei3.exercicio.infraestructure.entity.Perfil;
 import com.ei3.exercicio.infraestructure.entity.PerfilPessoa;
+import com.ei3.exercicio.infraestructure.entity.Pessoa;
 import com.ei3.exercicio.infraestructure.entity.Projeto;
+import com.ei3.exercicio.infraestructure.entity.TipoPerfil;
 import com.ei3.exercicio.infraestructure.repository.interfaces.AlocacaoRepository;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilPessoaRepositoryJPA;
+import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PerfilRepositoryJPA;
+import com.ei3.exercicio.infraestructure.repository.interfacesJPA.PessoaRepositoryJPA;
 import com.ei3.exercicio.infraestructure.repository.interfacesJPA.ProjetoRepositoryJPA;
 
 import jakarta.transaction.Transactional;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@SpringBootTest(properties ="spring.sql.init.mode=never")
 @Transactional
 public class AlocacaoRepositoryTest {
     @Autowired
@@ -30,6 +33,10 @@ public class AlocacaoRepositoryTest {
     private PerfilPessoaRepositoryJPA perfilPessoaRepositoryJPA;
     @Autowired
     private ProjetoRepositoryJPA projetoRepositoryJPA;
+    @Autowired
+    private PerfilRepositoryJPA perfilRepository;
+    @Autowired
+    private PessoaRepositoryJPA pessoaRepository;
 
     private Projeto projetoEntity;
     private AlocacaoId alocacaoId;
@@ -39,8 +46,18 @@ public class AlocacaoRepositoryTest {
 
     @BeforeEach
     public void setup(){
-        p_perfil = this.perfilPessoaRepositoryJPA.findById(1L).get();
-        projetoEntity = this.projetoRepositoryJPA.findById(1L).get();
+        Pessoa p = new Pessoa("Gustavo Teixeira");
+        pessoaRepository.save(p);
+        Perfil perfil = new Perfil();
+        perfil.setTipo(TipoPerfil.DEV);
+        perfilRepository.save(perfil);
+
+        p_perfil = new PerfilPessoa(p, perfil);
+        p_perfil = perfilPessoaRepositoryJPA.save(p_perfil);
+        Projeto projeto = new Projeto("Projeto Alpha", LocalDate.of(2025, 8,20), LocalDate.of(2025,10,25), "Nada");
+        
+        projetoEntity = this.projetoRepositoryJPA.save(projeto);
+
 
         alocacaoId = new AlocacaoId(p_perfil.getId(), projetoEntity.getId());
 
