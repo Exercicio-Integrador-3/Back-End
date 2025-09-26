@@ -42,7 +42,8 @@ public class ContratoImplService implements ContratoService{
             return false;
         }
 
-        Optional<PerfilPessoa> perfilPessoa = perfilPessoaRepository.findByPessoaId(pessoa.getId()).filter(pp -> pp.getPerfil().getId() == perfil.getId()).stream().findFirst();
+        // List<perfilPessoa> --
+        Optional<PerfilPessoa> perfilPessoa = perfilPessoaRepository.findByPessoaId(pessoa.getId()).stream().filter(pp -> pp.getPerfil().getId() == perfil.getId()).findFirst();
         //1. acha pelo id da pessoa, 2. filtra perfilPessoa e vê se já existe algum perfil com essa pessoa, 3.pega o primeiro    
         PerfilPessoa ppNovo; 
 
