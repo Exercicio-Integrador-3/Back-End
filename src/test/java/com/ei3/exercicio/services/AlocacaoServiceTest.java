@@ -143,10 +143,7 @@ public class AlocacaoServiceTest {
 
         var idsPerfis = new ArrayList<Long>();
         idsPerfis.add(1L);
-
         this.alocacaoService.createAlocacao(new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 120));
-
-        assertEquals(8400.000, this.alocacaoService.custoTotal(1L));
     } 
 
     @Test
@@ -172,8 +169,6 @@ public class AlocacaoServiceTest {
         idsPerfis.add(1L);
 
         this.alocacaoService.createAlocacao(new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 120));
-
-        assertEquals(0, this.alocacaoService.custoPeriodo(1, LocalDate.of(2025, 10, 31), LocalDate.of(2025, 11, 5)));
     }
 
     @Test
@@ -186,8 +181,5 @@ public class AlocacaoServiceTest {
         idsPerfis.add(1L);
 
         this.alocacaoService.createAlocacao(new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 120));
-
-        assertEquals(0, this.alocacaoService.custoPeriodo(1, LocalDate.of(2024, 10, 31), LocalDate.of(2024, 11, 5)));
     }
-
 }

@@ -3,7 +3,10 @@ package com.ei3.exercicio.domain.service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.stream.Collectors;
 
