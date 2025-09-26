@@ -2,11 +2,9 @@ package com.ei3.exercicio.domain.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.ei3.exercicio.domain.dto.CreatePessoaDto;
 import com.ei3.exercicio.domain.dto.PessoaDto;
@@ -39,12 +37,11 @@ public class PessoaImplService implements PessoaService {
             .map(p -> new PessoaDto(p.getId(), p.getNome()))
             .toList();
     }
+    
     @Override
     public List<Long> getAllIds() {
-    return pessoaRepository.getAllIds();
-}
-
-
+        return pessoaRepository.getAllIds();
+    }
 
     @Override
     public Optional<PessoaDto> getPessoaById(long id) {
