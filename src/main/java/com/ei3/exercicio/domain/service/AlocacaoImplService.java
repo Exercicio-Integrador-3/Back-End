@@ -53,6 +53,10 @@ public class AlocacaoImplService implements AlocacaoService{
 
     @Override
     public boolean createAlocacao(CreateAlocacaoDto alocacaoDto) {
+        // 
+        if(alocacaoDto.idsPerfil().size() != alocacaoDto.idsPessoas().size()){
+            return false;
+        }
         // checar se os perfis existem
         List<Perfil> perfis = alocacaoDto.idsPerfil().stream().map(id -> perfilRepository.getById(id).orElse(null)).toList();
         if (perfis.contains(null)) return false;
@@ -65,13 +69,23 @@ public class AlocacaoImplService implements AlocacaoService{
         Projeto projeto = projetoRepository.getById(alocacaoDto.idProjeto()).orElse(null);
         if (projeto == null) return false;
 
-        boolean temDuplicadas = alocacaoDto.idsPessoas().stream()
+        // checar se duas pessoas estao tentando exercer o mesmo cargo
+        boolean idsPessoasTemDuplicatas = alocacaoDto.idsPessoas().stream()
                                             .collect(Collectors.toSet())
                                             .size() != alocacaoDto.idsPessoas().size(); 
-        if(temDuplicadas){
+        if(idsPessoasTemDuplicatas){
             return false;
         }
-                                            // pegar perfis pessoas.
+        
+
+        boolean possuiMaisDeUmGerente = alocacaoDto.idsPerfil().stream().filter(id -> id == 1).count() > 1;
+
+        if(possuiMaisDeUmGerente){
+            return false;
+        }
+        
+
+        // pegar perfis pessoas.
         List<PerfilPessoa> pps = pessoas.stream()
                                         .map(p -> this.perfilPessoaRepository.findByPessoaId(p.getId()).orElse(null))
                                         .toList();
@@ -90,12 +104,16 @@ public class AlocacaoImplService implements AlocacaoService{
             }
         }
 
-        boolean qtdGerentes = alocacoes.stream()
+        boolean temGerente = alocacoes.stream()
                 .anyMatch(a -> a.getPerfilPessoa().getPerfil().getTipo() == TipoPerfil.GERENTE);
 
 
         // checa se esta tentando inserir um gerente
         boolean tentaInserirGerente = alocacaoDto.idsPerfil().stream().anyMatch(e -> this.perfilRepository.getById(e).get().tipo == TipoPerfil.GERENTE);
+
+        if (tentaInserirGerente && temGerente) {
+            return false;
+        }
         //mapa de id pessoas --- perfil para alocar
         Map<Long, TipoPerfil> mapa = new HashMap<>(); 
         //popula um mapa para saber o que cada pessoa irá ser.
@@ -103,13 +121,13 @@ public class AlocacaoImplService implements AlocacaoService{
         for(int i = 0; i < alocacaoDto.idsPessoas().size(); i++){
             mapa.put(alocacaoDto.idsPessoas().get(i), this.perfilRepository.getById(alocacaoDto.idsPerfil().get(i)).get().getTipo());
         }
+        // idsPessoas = [1,2,3]
+        // idPerfil = [1,2,3]
+        // 1 -> 1; 2 -> 2; 3 -> 3
+     
         
-        if (tentaInserirGerente && qtdGerentes) {
-            return false;
-        }
-
         for(long key : mapa.keySet()){
-            //perfis de cada  pessoa
+            //perfis de cada pessoa
             var perfisDaPessoa = this.perfilPessoaRepository.findAllByPessoaId(key).stream().map(p -> p.getPerfil().tipo).toList();
             PerfilPessoa perfilPessoa;
             Perfil perfil;
@@ -118,6 +136,7 @@ public class AlocacaoImplService implements AlocacaoService{
                 //se nao existe, cria.
                 perfil = new Perfil();
                 perfil.setTipo(mapa.get(key));
+                perfil.setId(mapa.get(key).ordinal()+1); // mapa.get(key) retorna o TipoPerfil desejado 
                 perfilPessoa = this.perfilPessoaRepository.insert(new PerfilPessoa(this.pessoaRepository.getById(key).get(), perfil));
             }else{
                 // se existe busca do repositório
