@@ -1,5 +1,7 @@
 package com.ei3.exercicio.domain.dto;
 
-public record CreateAlocacaoDto(long idPessoa, long idPerfil, long idProjeto, int quantidadeHoras) {
+import java.util.List;
+
+public record CreateAlocacaoDto(List<Long> idsPessoas, List<Long> idsPerfil, long idProjeto, int quantidadeHoras) {
     
 }
