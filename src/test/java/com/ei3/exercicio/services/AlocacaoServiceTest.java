@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.ei3.exercicio.domain.dto.CreateAlocacaoDto;
 import com.ei3.exercicio.domain.service.AlocacaoImplService;
+import com.ei3.exercicio.infraestructure.repository.interfaces.ProjetoRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -24,6 +25,10 @@ public class AlocacaoServiceTest {
     
     @Autowired
     private AlocacaoImplService alocacaoService;
+
+    @Autowired
+    private ProjetoRepository projetoRepository;
+    
 
     @Test
     public void addingValidEntityshouldReturnTrue(){
@@ -188,5 +193,64 @@ public class AlocacaoServiceTest {
 
         assertEquals(0, this.alocacaoService.custoPeriodo(1, LocalDate.of(2024, 10, 31), LocalDate.of(2024, 11, 5)));
 
+    }
+
+    @Test
+    public void statusShouldReturnTrue(){
+        var idsPessoas = new ArrayList<Long>();
+        idsPessoas.add(1L);
+        idsPessoas.add(2L);
+        idsPessoas.add(3L);
+
+        var idsPerfis = new ArrayList<Long>();
+        idsPerfis.add(1L);
+        idsPerfis.add(2L);
+        idsPerfis.add(3L);
+
+
+        var alocacao1 = new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 200);
+        this.alocacaoService.createAlocacao(alocacao1);
+        assertTrue(this.projetoRepository.getById(1).get().getIs_active());
+    }
+
+    @Test
+    public void statusWithoutAllRolesShouldReturnFalse(){
+        var idsPessoas = new ArrayList<Long>();
+        idsPessoas.add(1L);
+        idsPessoas.add(2L);
+        idsPessoas.add(3L);
+
+        var idsPerfis = new ArrayList<Long>();
+        idsPerfis.add(1L);
+        idsPerfis.add(3L);
+        idsPerfis.add(3L);
+
+
+        var alocacao1 = new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 200);
+        this.alocacaoService.createAlocacao(alocacao1);
+        assertFalse(this.projetoRepository.getById(1).get().getIs_active());
+    }
+
+    @Test
+    public void addingAlocacaoWithDatesStatusShouldReturnFalse(){
+        var idsPessoas = new ArrayList<Long>();
+        idsPessoas.add(1L);
+        idsPessoas.add(2L);
+        idsPessoas.add(3L);
+
+        var idsPerfis = new ArrayList<Long>();
+        idsPerfis.add(1L);
+        idsPerfis.add(2L);
+        idsPerfis.add(3L);
+
+        var proj = this.projetoRepository.getById(1).get();
+        proj.setDataInicio(LocalDate.of(2025, 8, 2));
+        proj.setDataFim(LocalDate.of(2025, 8,12));
+
+        this.projetoRepository.updateStatus(proj);
+
+        var alocacao1 = new CreateAlocacaoDto(idsPessoas, idsPerfis, 1, 200);
+        this.alocacaoService.createAlocacao(alocacao1);
+        assertFalse(this.projetoRepository.getById(1).get().getIs_active());
     }
 }

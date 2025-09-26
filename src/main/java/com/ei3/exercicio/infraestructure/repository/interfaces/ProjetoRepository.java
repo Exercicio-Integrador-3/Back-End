@@ -9,4 +9,5 @@ public interface ProjetoRepository{
    public Projeto insert(Projeto projeto);
    public List<Projeto> getAll();
    public Optional<Projeto> getById(long id);
+   void updateStatus(Projeto projeto);
 }

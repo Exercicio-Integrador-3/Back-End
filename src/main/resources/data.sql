@@ -25,20 +25,20 @@ INSERT INTO PERFIL_PESSOA (PESSOA_ID, PERFIL_ID)
 VALUES (5, 3);
 
 -- Projetos
-INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM) 
-VALUES ('Projeto Alpha', 'Sistema de gestão corporativa', '2025-01-10', '2025-06-30');
+INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM, IS_ACTIVE) 
+VALUES ('Projeto Alpha', 'Sistema de gestão corporativa', '2025-01-10', '2025-06-30', false);
 
-INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM) 
-VALUES ('Projeto Beta', 'Aplicativo mobile de delivery', '2025-02-01', '2025-08-15');
+INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM, IS_ACTIVE) 
+VALUES ('Projeto Beta', 'Aplicativo mobile de delivery', '2025-02-01', '2025-08-15',false);
 
-INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM) 
-VALUES ('Projeto Omega', 'Plataforma de gerenciamento financeiro', '2025-03-01', '2025-09-20');
+INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM, IS_ACTIVE) 
+VALUES ('Projeto Omega', 'Plataforma de gerenciamento financeiro', '2025-03-01', '2025-09-20', false);
 
-INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM) 
-VALUES ('Projeto Delta', 'Sistema de controle de estoque', '2025-01-15', '2025-07-10');
+INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM, IS_ACTIVE) 
+VALUES ('Projeto Delta', 'Sistema de controle de estoque', '2025-01-15', '2025-07-10', false);
 
-INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM) 
-VALUES ('Projeto Sigma', 'Plataforma de e-learning', '2025-04-01', '2025-12-15');
+INSERT INTO PROJETO (NOME, DESCRICAO, DATA_INICIO, DATA_FIM, IS_ACTIVE) 
+VALUES ('Projeto Sigma', 'Plataforma de e-learning', '2025-04-01', '2025-12-15', false);
 
 -- Contratos
 INSERT INTO CONTRATO (PERFIL_PESSOA_ID, DATA_INICIO, DATA_FIM, HORAS_SEMANAIS, SALARIO_HORA)
