@@ -15,7 +15,7 @@ public class Pessoa {
     private long id;
 
     @NotBlank(message = "O nome não pode estar em branco")
-    @Size(min=2, max=75, message="O nome tem que ter entre 2 e 50 caracteres")
+    @Size(min=2, max=75, message="O nome tem que ter entre 2 e 75 caracteres")
     private String nome;
 
     public long getId() {

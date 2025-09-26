@@ -7,8 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -21,19 +24,23 @@ public class Contrato {
     private PerfilPessoa perfilPessoa;
     
     @NotNull
+    @FutureOrPresent(message = "Data de início tem que ser no mínimo hoje")
     private LocalDate dataInicio;
     
+    @Future(message = "Data de fim precisa ser uma data no futuro e maior que hoje")
     private LocalDate dataFim;
 
     @NotNull
     @Max(40)
+    @Positive(message = "Horas Semanais precisam ser um número positivo maior que 0")
     private int horasSemanais;
 
     @NotNull
+    @Positive(message = "Salário precisa ser um número positivo maior que 0")
     private double salarioHora;
 
-    public Contrato(PerfilPessoa perfilPessoa, @NotNull LocalDate dataInicio, LocalDate dataFim,
-            @NotNull @Size(max = 40) int horasSemanais, @NotNull double salarioHora) {
+    public Contrato(PerfilPessoa perfilPessoa, @NotNull @FutureOrPresent(message = "Data de início tem que ser no mínimo hoje") LocalDate dataInicio, @Future(message = "Data de fim precisa ser uma data no futuro e maior que hoje") LocalDate dataFim,
+            @NotNull @Size(max = 40) @Positive(message = "Horas Semanais precisam ser um número positivo maior que 0") int horasSemanais, @NotNull @Positive(message = "Salário precisa ser um número positivo maior que 0") double salarioHora) {
         this.perfilPessoa = perfilPessoa;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;

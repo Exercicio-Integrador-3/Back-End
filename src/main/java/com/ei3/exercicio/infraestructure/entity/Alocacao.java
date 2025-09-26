@@ -4,7 +4,9 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Alocacao{
@@ -21,11 +23,12 @@ public class Alocacao{
     private Projeto projeto;
 
     @NotNull
+    @Positive(message = "Quantidade de horas precisa ser um número positivo maior que 0")
     private int quantidadeHoras;
 
     public Alocacao(){}
 
-    public Alocacao(AlocacaoId id, @NotNull int quantidadeHoras) {
+    public Alocacao(AlocacaoId id, @NotNull @Positive(message = "Quantidade de horas precisa ser um número positivo maior que 0") int quantidadeHoras) {
         Id = id;
         this.quantidadeHoras = quantidadeHoras;
     }

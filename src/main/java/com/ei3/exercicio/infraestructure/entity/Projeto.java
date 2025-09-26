@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,12 +20,14 @@ public class Projeto {
     private long id;
     
     @NotBlank(message = "O nome não pode estar em branco")
-    @Size(min=2, max=75, message="O nome tem que ter entre 2 e 50 caracteres")
+    @Size(min=2, max=75, message="O nome tem que ter entre 2 e 75 caracteres")
     private String nome;
 
     @NotNull
+    @FutureOrPresent(message = "Data de início tem que ser no mínimo hoje")
     private LocalDate dataInicio;
 
+    @Future(message = "Data de fim precisa ser uma data no futuro e maior que hoje")
     private LocalDate dataFim;
 
     @NotBlank(message = "A descrição não pode estar em branco")
@@ -35,8 +39,8 @@ public class Projeto {
     }
 
     public Projeto(long id,
-            @NotBlank(message = "O nome não pode estar em branco") @Size(min = 2, max = 75, message = "O nome tem que ter entre 2 e 50 caracteres") String nome,
-            @NotNull LocalDate dataInicio, LocalDate dataFim,
+            @NotBlank(message = "O nome não pode estar em branco") @Size(min = 2, max = 75, message = "O nome tem que ter entre 2 e 75 caracteres") String nome,
+            @NotNull @FutureOrPresent(message = "Data de início tem que ser no mínimo hoje") LocalDate dataInicio, @Future(message = "Data de fim precisa ser uma data no futuro e maior que hoje") LocalDate dataFim,
             @NotBlank(message = "A descrição não pode estar em branco") @Size(min = 2, max = 255, message = "A descrição tem que ter entre 2 e 255 caracteres") String descricao) {
         this.id = id;
         this.nome = nome;
